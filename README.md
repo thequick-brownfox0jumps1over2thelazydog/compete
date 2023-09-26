@@ -13,8 +13,9 @@ cargo compete login atcoder
 # 2を選択
 cargo compete init atcoder
 
+cd ${cmp}/rust/atcoder
 # CONTEST_NAME: practice, abc123, etc.
-cargo compete new <CONTEST_NAME>
+./new.sh <CONTEST_NAME>
 
 # PROBLEM_NAME: a, b, c, ...
 cargo compete test <PROBLEM_NAME>

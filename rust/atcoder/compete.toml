@@ -130,7 +130,7 @@ toolchain = "1.70.0"
 # Profile for `cargo build`. ("dev" | "release")
 #
 # Defaults to `"dev"`.
-#profile = "dev"
+profile = "release"
 
 [submit]
 kind = "file"
