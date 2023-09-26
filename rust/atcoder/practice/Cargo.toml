@@ -1,0 +1,21 @@
+[package]
+name = "practice"
+version = "0.1.0"
+edition = "2018"
+
+[package.metadata.cargo-compete.bin]
+practice-a = { alias = "a", problem = "https://atcoder.jp/contests/practice/tasks/practice_1" }
+practice-b = { alias = "b", problem = "https://atcoder.jp/contests/practice/tasks/practice_2" }
+
+[[bin]]
+name = "practice-a"
+path = "src/bin/a.rs"
+
+[[bin]]
+name = "practice-b"
+path = "src/bin/b.rs"
+
+[dependencies]
+proconio = { version = "=0.4.5", features = ["derive"] }
+
+[dev-dependencies]
