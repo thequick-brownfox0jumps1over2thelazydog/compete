@@ -8,8 +8,8 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-
+        N: usize,
     }
 
-
+    println!("{:010b}", N);
 }

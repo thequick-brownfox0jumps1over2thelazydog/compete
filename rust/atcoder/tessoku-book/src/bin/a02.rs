@@ -8,8 +8,17 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-
+        N: usize,
+        X: usize,
+        A: [usize; N],
     }
 
+    for a in A.iter() {
+        if *a == X {
+            println!("Yes");
+            return;
+        }
+    }
 
+    println!("No");
 }

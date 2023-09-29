@@ -8,8 +8,9 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-
+        A: usize,
+        B: usize,
     }
 
-
+    println!("{}", A + B);
 }
