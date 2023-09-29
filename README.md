@@ -2,6 +2,11 @@
 
 ## Rust
 
+### 実装
+- 数値型は考えている時間が勿体ないので基本的にisizeに統一、インデックス等でunsignedを強制される箇所のみusizeを指定
+- 標準入力で要素数が静的な多次元配列は行をタプルで指定
+
+
 ### cargo-compete
 
 #### Get started
@@ -19,7 +24,7 @@ cd ${cmp}/rust/atcoder
 
 # PROBLEM_NAME: a, b, c, ...
 cargo compete test <PROBLEM_NAME>
-cargo compete submit <PROBLEM_NAME>
+cargo compete submit <PROBLEM_NAME> [--no-test]
 ```
 
 #### 注意
