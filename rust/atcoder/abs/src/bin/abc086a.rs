@@ -6,10 +6,7 @@ fn main() {
         b: u16,
     }
 
-    let result = match a * b % 2 {
-        0 => "Even",
-        _ => "Odd",
-    };
+    let result = if a * b % 2 == 0 { "Even" } else { "Odd" };
 
     println!("{result}");
 }
