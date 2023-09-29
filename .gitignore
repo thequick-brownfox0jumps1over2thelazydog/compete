@@ -1,4 +1,7 @@
 .*
 !.gitignore
+!.vscode
+
+*.code-workspace
 
 target/
