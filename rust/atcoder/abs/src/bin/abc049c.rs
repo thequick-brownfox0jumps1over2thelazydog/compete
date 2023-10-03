@@ -6,14 +6,14 @@ use std::collections::HashSet;
 
 use proconio::{input, marker::Chars};
 
-fn get_next_index(string: &str) -> i8 {
+fn get_next_index(string: &str) -> isize {
     for token in ["dreamer", "dream", "eraser", "erase"] {
         if !string.starts_with(token) {
             continue;
         }
 
         if token != "dreamer" {
-            return token.len() as i8;
+            return token.len() as isize;
         }
 
         if string.len() == 7 {
@@ -40,18 +40,17 @@ fn main() {
         S: String,
     }
 
-    let s: &str = &S;
-    let mut index: usize = 0;
+    let mut index = 0;
 
     while true {
-        let next_index = get_next_index(&s[index..]);
+        let next_index = get_next_index(&S[index..]);
         if next_index < 0 {
             println!("NO");
             break;
         }
 
         index += next_index as usize;
-        if index == s.len() {
+        if index == S.len() {
             println!("YES");
             break;
         }

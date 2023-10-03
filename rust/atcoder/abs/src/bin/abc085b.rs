@@ -7,11 +7,11 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        N: u8,
-        mut D: [u8; N],
+        N: usize,
+        mut D: [isize; N],
     }
 
-    let ds: HashSet<u8> = D.into_iter().collect();
+    let ds: HashSet<_> = D.into_iter().collect();
 
     println!("{}", ds.len());
 }

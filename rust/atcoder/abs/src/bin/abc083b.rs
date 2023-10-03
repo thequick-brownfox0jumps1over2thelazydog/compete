@@ -5,19 +5,19 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        N: u32,
-        A: u32,
-        B: u32,
+        N: isize,
+        A: isize,
+        B: isize,
     }
 
-    let mut result: u32 = 0;
+    let mut result = 0;
 
     for n in 1..=N {
         let sum_of_digits = n
             .to_string()
             .chars()
             .map(|c| c.to_digit(10).expect("Invalid number."))
-            .sum::<u32>();
+            .sum::<u32>() as isize;
         if A <= sum_of_digits && sum_of_digits <= B {
             result += n;
         }

@@ -5,11 +5,11 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        N: u8,
-        A: [u32; N],
+        N: usize,
+        A: [isize; N],
     }
 
-    let mut min_n_factors: usize = 30;
+    let mut min_n_factors = 30;
     for a in A.iter() {
         let n_factors = format!("{:b}", a)
             .chars()

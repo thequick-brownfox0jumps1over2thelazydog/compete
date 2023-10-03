@@ -5,13 +5,13 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        A: i16,
-        B: i16,
-        C: i16,
-        X: i16,
+        A: isize,
+        B: isize,
+        C: isize,
+        X: isize,
     }
 
-    let mut result: u32 = 0;
+    let mut result = 0;
 
     for i in (0..=A).rev() {
         let a = i * 500;
