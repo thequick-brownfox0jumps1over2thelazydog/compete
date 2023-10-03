@@ -5,19 +5,19 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        N: isize,
+        N: usize,
         A: [isize; N],
     }
 
-    let mut min_n_factors: isize = 30;
+    let mut min_n_factors = 30;
     for a in A.iter() {
         let n_factors = format!("{:b}", a)
             .chars()
             .rev()
             .position(|c| c == '1')
             .expect("Any a must be greater than 0");
-        if min_n_factors > n_factors as isize {
-            min_n_factors = n_factors as isize;
+        if min_n_factors > n_factors {
+            min_n_factors = n_factors;
         }
     }
 

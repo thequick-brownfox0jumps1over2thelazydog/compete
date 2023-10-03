@@ -9,9 +9,9 @@ use proconio::{input, marker::Chars};
 fn main() {
     input! {
         N: usize,
-        K: usize,
-        P: [usize; N],
-        Q: [usize; N],
+        K: isize,
+        P: [isize; N],
+        Q: [isize; N],
     }
 
     for p in P.iter() {

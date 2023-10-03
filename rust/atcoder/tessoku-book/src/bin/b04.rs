@@ -12,6 +12,7 @@ fn main() {
         N: String,
     }
 
+    // TODO: `from_str_radix` を使わない（推奨されている `parse` を使う）方法を模索
     //let n: &str = &N;
     //println!("{:?}", n.parse::<u32>().unwrap());
     println!("{}", isize::from_str_radix(&N, 2).unwrap());

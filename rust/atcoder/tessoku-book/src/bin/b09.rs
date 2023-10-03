@@ -14,12 +14,12 @@ use proconio::{
 fn main() {
     input! {
         N: usize,
-        ABCD: [(usize, usize, usize, usize); N],
+        ABCD: [(usize, usize, usize, usize); N],  // NOTE: 0始まりなのでUsize1として定義できない
     }
 
     const L: usize = 1500;
 
-    let mut cumulative_diffs: Vec<Vec<isize>> = vec![vec![0; L + 2]; L + 2];
+    let mut cumulative_diffs = vec![vec![0; L + 2]; L + 2];
     for abcd in ABCD.iter() {
         let a = abcd.0 + 1;
         let b = abcd.1 + 1;

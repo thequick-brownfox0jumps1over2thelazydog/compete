@@ -11,7 +11,7 @@ fn main() {
         X: isize,
     }
 
-    let mut result: isize = 0;
+    let mut result = 0;
 
     for i in (0..=A).rev() {
         let a = i * 500;

@@ -12,7 +12,7 @@ fn main() {
         K: isize,
     }
 
-    let mut result: usize = 0;
+    let mut result = 0;
 
     for i in 1..=N {
         if i > K - 2 {

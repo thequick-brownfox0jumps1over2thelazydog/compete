@@ -10,15 +10,15 @@ fn main() {
         B: isize,
     }
 
-    let mut result: isize = 0;
+    let mut result = 0;
 
     for n in 1..=N {
         let sum_of_digits = n
             .to_string()
             .chars()
             .map(|c| c.to_digit(10).expect("Invalid number."))
-            .sum::<u32>();
-        if A <= sum_of_digits as isize && sum_of_digits as isize <= B {
+            .sum::<u32>() as isize;
+        if A <= sum_of_digits && sum_of_digits <= B {
             result += n;
         }
     }

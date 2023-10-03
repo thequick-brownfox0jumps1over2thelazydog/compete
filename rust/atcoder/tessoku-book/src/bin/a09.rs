@@ -16,16 +16,16 @@ fn main() {
         H: usize,
         W: usize,
         N: usize,
-        ABCD: [(usize, usize, usize, usize); N],
+        ABCD: [(Usize1, Usize1, Usize1, Usize1); N],
     }
 
-    let mut cumulative_diffs: Vec<Vec<isize>> = vec![vec![0; W + 2]; H + 2];
+    let mut cumulative_diffs = vec![vec![0; W + 2]; H + 2];
 
     for abcd in ABCD.iter() {
-        let a = abcd.0;
-        let b = abcd.1;
-        let c = abcd.2;
-        let d = abcd.3;
+        let a = abcd.0 + 1;
+        let b = abcd.1 + 1;
+        let c = abcd.2 + 1;
+        let d = abcd.3 + 1;
 
         cumulative_diffs[a][b] += 1;
         cumulative_diffs[a][d + 1] -= 1;
@@ -45,7 +45,7 @@ fn main() {
     }
 
     for i in 1..=H {
-        let mut result: Vec<String> = Vec::new();
+        let mut result = Vec::new();
         for cd in cumulative_diffs[i][1..=W].iter() {
             result.push(cd.to_string());
         }

@@ -9,7 +9,7 @@ use proconio::{input, marker::Chars};
 fn main() {
     input! {
         N: usize,
-        A: [usize; N],
+        A: [isize; N],
     }
 
     for i in 0..N {

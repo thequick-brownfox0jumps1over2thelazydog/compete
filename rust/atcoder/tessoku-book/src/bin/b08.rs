@@ -13,16 +13,19 @@ use proconio::{
 fn main() {
     input! {
         N: usize,
-        XY: [(usize, usize); N],
+        XY: [(Usize1, Usize1); N],
         Q: usize,
-        ABCD: [(usize, usize, usize, usize); Q],
+        ABCD: [(Usize1, Usize1, Usize1, Usize1); Q],
     }
 
     const L: usize = 1500;
 
-    let mut cumulative_counts: Vec<Vec<usize>> = vec![vec![0; L + 1]; L + 1];
+    let mut cumulative_counts = vec![vec![0; L + 1]; L + 1];
     for xy in XY.iter() {
-        cumulative_counts[xy.0][xy.1] += 1;
+        let x = xy.0;
+        let y = xy.1;
+
+        cumulative_counts[x + 1][y + 1] += 1;
     }
 
     for i in 1..=L {
@@ -42,10 +45,10 @@ fn main() {
         let c = abcd.2;
         let d = abcd.3;
 
-        let x00 = cumulative_counts[a - 1][b - 1];
-        let x01 = cumulative_counts[c][b - 1];
-        let x10 = cumulative_counts[a - 1][d];
-        let x11 = cumulative_counts[c][d];
+        let x00 = cumulative_counts[a][b];
+        let x01 = cumulative_counts[c + 1][b];
+        let x10 = cumulative_counts[a][d + 1];
+        let x11 = cumulative_counts[c + 1][d + 1];
 
         println!("{}", x11 - x01 - x10 + x00);
     }

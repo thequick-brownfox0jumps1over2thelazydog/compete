@@ -5,11 +5,11 @@ use proconio::{input, marker::Chars};
 
 fn main() {
     input! {
-        N: isize,
+        N: usize,
         mut A: [isize; N],
     }
 
-    let mut result: isize = 0;
+    let mut result = 0;
     A.sort();
 
     for (index, a) in A.iter().rev().enumerate() {

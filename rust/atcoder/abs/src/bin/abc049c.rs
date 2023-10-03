@@ -40,18 +40,17 @@ fn main() {
         S: String,
     }
 
-    let s: &str = &S;
-    let mut index: usize = 0;
+    let mut index = 0;
 
     while true {
-        let next_index = get_next_index(&s[index..]);
+        let next_index = get_next_index(&S[index..]);
         if next_index < 0 {
             println!("NO");
             break;
         }
 
         index += next_index as usize;
-        if index == s.len() {
+        if index == S.len() {
             println!("YES");
             break;
         }

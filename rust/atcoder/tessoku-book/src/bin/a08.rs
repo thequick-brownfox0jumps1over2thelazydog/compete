@@ -18,7 +18,7 @@ fn main() {
         ABCD: [(Usize1, Usize1, Usize1, Usize1); Q],
     }
 
-    let mut cumulative_sums: Vec<Vec<isize>> = vec![vec![0; W + 1]; H + 1];
+    let mut cumulative_sums = vec![vec![0; W + 1]; H + 1];
     for i in 1..=H {
         for j in 1..=W {
             cumulative_sums[i][j] = cumulative_sums[i][j - 1] + X[i - 1][j - 1];

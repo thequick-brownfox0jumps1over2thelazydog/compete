@@ -9,12 +9,12 @@ use proconio::{input, marker::Chars};
 fn main() {
     input! {
         N: usize,
-        X: usize,
-        A: [usize; N],
+        X: isize,
+        A: [isize; N],
     }
 
-    for a in A.iter() {
-        if *a == X {
+    for &a in A.iter() {
+        if a == X {
             println!("Yes");
             return;
         }
