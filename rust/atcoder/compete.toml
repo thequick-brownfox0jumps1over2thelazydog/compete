@@ -25,11 +25,16 @@ src = '''
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
 #![allow(while_true)]
+#![allow(clippy::needless_range_loop)]
 
 use std::collections::HashSet;
 
-use proconio::{input, marker::Chars};
+use proconio::{
+    fastout, input,
+    marker::{Chars, Usize1},
+};
 
+#[fastout]
 fn main() {
     input! {
 
