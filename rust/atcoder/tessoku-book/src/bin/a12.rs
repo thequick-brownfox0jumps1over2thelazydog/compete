@@ -51,7 +51,7 @@ fn upper_bound(
 
 /**
 fn check(aas: &[isize], seconds: isize, quota: isize) -> bool {
-    aas.iter().map(|&a| seconds / a).sum::<isize>() >= quota
+    aas.iter().map(|a| seconds / a).sum::<isize>() >= quota
 }
 */
 fn check(query: usize, quota: isize, slice: &[isize]) -> Ordering {
