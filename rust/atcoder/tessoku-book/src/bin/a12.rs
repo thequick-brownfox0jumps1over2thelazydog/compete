@@ -5,9 +5,8 @@
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
-use std::{cmp::Ordering, collections::HashSet, fmt::Binary, str::MatchIndices};
+use std::{cmp::Ordering, collections::HashSet};
 
-use ndarray::Order;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
@@ -66,12 +65,9 @@ fn main() {
         A: [isize; N],
     }
 
-    const TEN: isize = 10;
-    const L: isize = TEN.pow(9);
-
     /**
     let mut left = 1;
-    let mut right = L;
+    let mut right = 10_isize.pow(9);
 
     while right - left > 1 {
         let midium = (left + right) / 2;
@@ -84,5 +80,5 @@ fn main() {
 
     println!("{right}");
     */
-    println!("{}", lower_bound(check, 1, L, K, &A));
+    println!("{}", lower_bound(check, 1, 10_isize.pow(9), K, &A));
 }
