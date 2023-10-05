@@ -14,12 +14,12 @@ use proconio::{
 };
 
 fn lower_bound(
-    f: fn(usize, isize, &[isize]) -> Ordering,
-    mut left: usize,
-    mut right: usize,
+    f: fn(isize, isize, &[isize]) -> Ordering,
+    mut left: isize,
+    mut right: isize,
     quota: isize,
     slice: &[isize],
-) -> usize {
+) -> isize {
     while left < right {
         let midium = (left + right) / 2;
         match f(midium, quota, slice) {
@@ -32,12 +32,12 @@ fn lower_bound(
 }
 
 fn upper_bound(
-    f: fn(usize, isize, &[isize]) -> Ordering,
-    mut left: usize,
-    mut right: usize,
+    f: fn(isize, isize, &[isize]) -> Ordering,
+    mut left: isize,
+    mut right: isize,
     quota: isize,
     slice: &[isize],
-) -> usize {
+) -> isize {
     while left < right {
         let midium = (left + right) / 2;
         match f(midium, quota, slice) {
@@ -49,8 +49,8 @@ fn upper_bound(
     left
 }
 
-fn check(query: usize, quota: isize, slice: &[isize]) -> Ordering {
-    slice[query].cmp(&quota)
+fn check(query: isize, quota: isize, slice: &[isize]) -> Ordering {
+    slice[query as usize].cmp(&quota)
 }
 
 #[fastout]
@@ -79,5 +79,5 @@ fn main() {
 
     //println!("{}", A.binary_search(&X).expect("Item X not found.") + 1);
 
-    println!("{}", lower_bound(check, 0, N, X, &A) + 1);
+    println!("{}", lower_bound(check, 0, N as isize, X, &A) + 1);
 }
