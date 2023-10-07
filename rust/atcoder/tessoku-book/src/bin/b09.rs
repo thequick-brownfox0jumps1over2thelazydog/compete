@@ -46,7 +46,7 @@ fn main() {
     let mut result: usize = 0;
     cumulative_diffs[1..=L + 1]
         .iter()
-        .for_each(|row| result += row[1..=L + 1].iter().filter(|&&c| c > 0).count());
+        .for_each(|row| result += row[1..=L + 1].iter().filter(|c| **c > 0).count());
 
     println!("{result}");
 }
