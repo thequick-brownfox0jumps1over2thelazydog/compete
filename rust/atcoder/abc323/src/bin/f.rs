@@ -6,10 +6,11 @@
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
-use std::{cmp::Ordering, collections::HashSet, fmt::Binary, str::MatchIndices};
+use std::{
+    cmp::Ordering,
+    collections::{HashMap, HashSet},
+};
 
-use ndarray::Order;
-use num_traits::real;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
@@ -53,9 +54,5 @@ fn upper_bound(
 
 #[fastout]
 fn main() {
-    input! {
-
-    }
-
-
+    input! {}
 }

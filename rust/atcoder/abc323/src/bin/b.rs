@@ -6,7 +6,10 @@
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
-use std::{cmp::Ordering, collections::HashSet};
+use std::{
+    cmp::Ordering,
+    collections::{HashMap, HashSet},
+};
 
 use proconio::{
     fastout, input,

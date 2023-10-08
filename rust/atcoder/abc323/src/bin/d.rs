@@ -9,12 +9,8 @@
 use std::{
     cmp::Ordering,
     collections::{HashMap, HashSet},
-    fmt::Binary,
-    str::MatchIndices,
 };
 
-use ndarray::Order;
-use num_traits::real;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
@@ -65,46 +61,33 @@ fn main() {
 
     SC.sort_by(|a, b| a.0.cmp(&b.0));
 
-    let mut map = HashMap::new();
+    let mut slimes_map = HashMap::new();
     for sc in SC.iter() {
         let s = sc.0;
         let c = sc.1;
-        match map.get_mut(&s) {
-            Some(n) => *n += c,
-            None => _ = map.insert(s, c),
-        }
 
-        let binary = format!("{:b}", c);
-        let digits = binary.len();
-        for i in 0..digits {
-            if binary.chars().nth(i).unwrap() == '1' {
-                let pow = digits - i - 1;
-                let new_size = s * 2_isize.pow(pow as u32);
-                match map.get_mut(&new_size) {
-                    Some(n) => *n += 1,
-                    None => _ = map.insert(new_size, 1),
-                }
+        let mut n_factor = 0;
+        for si in format!("{:b}", s).chars().rev() {
+            if si == '1' {
+                break;
             }
 
-            if i == digits - 1 {
-                match map.get_mut(&s) {
-                    Some(n) => {
-                        *n = if binary.chars().nth(i).unwrap() == '1' {
-                            1
-                        } else {
-                            0
-                        }
-                    }
-                    None => _ = map.insert(s, 0),
-                }
-            }
+            n_factor += 1;
         }
+        let group = s >> n_factor;
+        let amount = s * c / group;
+        slimes_map
+            .entry(group)
+            .and_modify(|n| *n += amount)
+            .or_insert(amount);
     }
 
-    let xs: Vec<(&isize, &isize)> = map.iter().collect();
     let mut result = 0;
-    for x in xs.iter() {
-        result += x.1;
+    for (group, n_slimes) in slimes_map.iter() {
+        result += format!("{:b}", n_slimes)
+            .chars()
+            .filter(|c| *c == '1')
+            .count()
     }
 
     println!("{result}");
