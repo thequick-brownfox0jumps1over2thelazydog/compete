@@ -9,14 +9,8 @@
 use std::{
     cmp::Ordering,
     collections::{HashMap, HashSet},
-    default,
-    fmt::Binary,
-    hash::Hash,
-    str::MatchIndices,
 };
 
-use ndarray::Order;
-use num_traits::real;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
@@ -58,43 +52,29 @@ fn upper_bound(
     left
 }
 
-/**
-
-2 8
-1000 1000 500 500 500 500 500 500
-xxoooooo
-ooxxxxxx
-
- */
-
 #[fastout]
 fn main() {
     input! {
         N: usize,
         M: usize,
-        A: [isize; M], // 配点。500 <= 100n <= 2500
-        S: [Chars; N], // 正解しているか否か
+        A: [isize; M],
+        S: [Chars; N],
     }
 
     let mut sorted_A = A.clone();
     sorted_A.sort();
 
-    let mut max_score = 0;
     let mut scores = vec![0; N];
-    let mut default_score_map = HashMap::new();
-    for i in 0..21 {
-        default_score_map.insert(500 + i * 100, 0);
-    }
-    let mut gained_points: Vec<HashMap<isize, isize>> = vec![default_score_map; N];
-
+    let mut gained_point_maps = vec![HashMap::new(); N];
+    let mut max_score = 0;
     for i in 0..N {
         for j in 0..M {
             if S[i][j] == 'o' {
                 scores[i] += A[j];
-                match gained_points[i].get_mut(&A[j]) {
-                    Some(x) => *x += 1,
-                    None => _ = gained_points[i].insert(A[j], 1),
-                }
+                gained_point_maps[i]
+                    .entry(A[j])
+                    .and_modify(|n| *n += 1)
+                    .or_insert(1);
             }
         }
 
@@ -106,26 +86,23 @@ fn main() {
     }
 
     for i in 0..N {
-        let mut diff = max_score - scores[i];
-        if diff == 0 {
+        if scores[i] == max_score {
             println!("0");
             continue;
         }
 
-        let mut counter = 0;
+        let mut short_points = max_score - scores[i];
+        let mut n_questions = 0;
         for a in sorted_A.iter().rev() {
-            if *gained_points[i].get(a).unwrap_or(&0) > 0 {
-                match gained_points[i].get_mut(a) {
-                    Some(x) => *x -= 1,
-                    None => _ = gained_points[i].insert(*a, 0),
-                }
+            if *gained_point_maps[i].get(a).unwrap_or(&0) > 0 {
+                gained_point_maps[i].entry(*a).and_modify(|n| *n -= 1);
                 continue;
             }
 
-            diff -= a;
-            counter += 1;
-            if diff < 0 {
-                println!("{counter}");
+            short_points -= a;
+            n_questions += 1;
+            if short_points < 0 {
+                println!("{n_questions}");
                 break;
             }
         }

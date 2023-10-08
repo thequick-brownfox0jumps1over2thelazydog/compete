@@ -6,10 +6,8 @@
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
-use std::{cmp::Ordering, collections::HashSet, fmt::Binary, str::MatchIndices};
+use std::{cmp::Ordering, collections::HashSet};
 
-use ndarray::Order;
-use num_traits::real;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
@@ -58,17 +56,18 @@ fn main() {
         S: [Chars; N],
     }
 
-    let mut vs: Vec<(isize, isize)> = vec![(0, 0); N];
+    let mut player_and_wins: Vec<(isize, isize)> = vec![(0, 0); N];
 
     for i in 0..N {
-        let wins = S[i].iter().filter(|c| **c == 'o').count();
-        vs[i] = (i as isize + 1, wins as isize);
+        let n_wins = S[i].iter().filter(|c| **c == 'o').count();
+        player_and_wins[i] = (i as isize + 1, n_wins as isize);
     }
 
-    vs.sort_by(|a, b| (-a.1).cmp(&(-b.1)));
-    let mut result: Vec<String> = vec![String::from(""); N];
-    for (index, v) in vs.iter().enumerate() {
-        result[index] = v.0.to_string();
+    player_and_wins.sort_by(|a, b| (-a.1).cmp(&(-b.1)));
+
+    let mut result = vec![String::from(""); N];
+    for (i, pw) in player_and_wins.iter().enumerate() {
+        result[i] = pw.0.to_string();
     }
 
     println!("{}", result.join(" "));
