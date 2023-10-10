@@ -24,15 +24,15 @@ test-suite = "{{ manifest_dir }}/testcases/{{ bin_alias }}.yml"
 src = '''
 #![allow(dead_code)]
 #![allow(non_snake_case)]
-#![allow(unused_attributes)]
+#![allow(unused_doc_comments)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
 use std::{
-    cmp::Ordering,
     collections::{HashMap, HashSet},
+    thread::Builder,
 };
 
 use proconio::{
@@ -40,53 +40,28 @@ use proconio::{
     marker::{Chars, Usize1},
 };
 
-fn lower_bound(
-    f: fn(isize, isize, &[isize]) -> Ordering,
-    mut left: isize,
-    mut right: isize,
-    quota: isize,
-    slice: &[isize],
-) -> isize {
-    while left < right {
-        let midium = (left + right) / 2;
-        match f(midium, quota, slice) {
-            Ordering::Less => left = midium + 1,
-            _ => right = midium,
+#[derive(Default)]
+struct Solver {}
+
+impl Solver {
+    #[fastout]
+    fn solve(&mut self) {
+        input! {
+            //
         }
+
+        //
     }
-
-    left
 }
 
-fn upper_bound(
-    f: fn(isize, isize, &[isize]) -> Ordering,
-    mut left: isize,
-    mut right: isize,
-    quota: isize,
-    slice: &[isize],
-) -> isize {
-    while left < right {
-        let midium = (left + right) / 2;
-        match f(midium, quota, slice) {
-            Ordering::Less | Ordering::Equal => left = midium + 1,
-            _ => right = midium,
-        }
-    }
-
-    left
-}
-
-fn check(query: isize, quota: isize, slice: &[isize]) -> Ordering {
-    slice[query as usize].cmp(&quota)
-}
-
-#[fastout]
 fn main() {
-    input! {
-
-    }
-
-
+    Builder::new()
+        .name("big stack size".into())
+        .stack_size(32 * 1024 * 1024) // default: 2MiB -> 32MiB
+        .spawn(|| Solver::default().solve())
+        .unwrap()
+        .join()
+        .unwrap();
 }
 '''
 

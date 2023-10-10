@@ -1,18 +1,22 @@
-#![allow(dead_code)]
-#![allow(non_snake_case)]
-#![allow(unused_doc_comments)]
-#![allow(unused_imports)]
-#![allow(while_true)]
-#![allow(clippy::needless_range_loop)]
+use std::cmp::Ordering;
 
-use std::{cmp::Ordering, collections::HashSet};
+use cargo_snippets::snippet;
 
-use proconio::{
-    fastout, input,
-    marker::{Chars, Usize1},
-};
-
-struct BinarySearch<'a, T> {
+#[snippet("binary_search", prefix = "use std::cmp::Ordering;")]
+/**
+ *  e.g.
+ *  ```
+ *  let mut binary_search: BinarySearch<isize> = BinarySearch {
+ *      data: &[],
+ *      right: 10_isize.pow(9),
+ *      target: 0,
+ *      strict_equal: true,
+ *      ..BinarySearch::default(),
+ *  };
+ *  let index = binary_search.lower_bound();
+ *  ```
+ */
+pub struct BinarySearch<'a, T> {
     // 元データ
     data: &'a [isize],
     left: isize,
@@ -24,6 +28,7 @@ struct BinarySearch<'a, T> {
     args: T,
 }
 
+#[snippet("binary_search")]
 impl<'a, T> BinarySearch<'a, T> {
     fn is_searchable(&self) -> bool {
         self.left < self.right
@@ -80,6 +85,7 @@ impl<'a, T> BinarySearch<'a, T> {
     }
 }
 
+#[snippet("binary_search")]
 impl<'a, T> Default for BinarySearch<'a, T>
 where
     T: Default,
@@ -96,30 +102,9 @@ where
     }
 }
 
+#[snippet("binary_search")]
 impl<'a, T> BinarySearch<'a, T> {
     fn step_function(&self, query: isize) -> Ordering {
-        self.data[query as usize].cmp(&self.target)
-    }
-}
-
-#[fastout]
-fn main() {
-    input! {
-        N: usize,
-        mut A: [isize; N],
-        Q: usize,
-        X: [isize; Q],
-    }
-
-    A.sort();
-
-    for x in X.iter() {
-        let mut binary_search: BinarySearch<isize> = BinarySearch {
-            data: &A,
-            right: N as isize,
-            target: *x,
-            ..BinarySearch::default()
-        };
-        println!("{}", binary_search.lower_bound());
+        todo!()
     }
 }
