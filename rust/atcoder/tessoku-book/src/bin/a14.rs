@@ -1,9 +1,8 @@
 #![allow(dead_code)]
 #![allow(non_snake_case)]
-#![allow(unused_attributes)]
+#![allow(unused_doc_comments)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
-#![allow(unused_doc_comments)]
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
@@ -14,68 +13,94 @@ use proconio::{
     marker::{Chars, Usize1},
 };
 
-fn lower_bound(
-    f: fn(isize, isize, &[isize]) -> Ordering,
-    mut left: isize,
-    mut right: isize,
-    quota: isize,
-    slice: &[isize],
+struct BinarySearch<'a, T> {
+    // 元データ
+    data: &'a [isize],
+    left: isize,
+    right: isize,
+    // 目標
+    target: isize,
     strict_equal: bool,
-) -> isize {
-    while left < right {
-        let midium = (left + right) / 2;
-        match f(midium, quota, slice) {
-            Ordering::Less => left = midium + 1,
-            Ordering::Equal => {
-                if strict_equal {
-                    return midium;
-                } else {
-                    right = midium
+    // その他
+    args: T,
+}
+
+impl<'a, T> BinarySearch<'a, T> {
+    fn is_searchable(&self) -> bool {
+        self.left < self.right
+    }
+
+    fn midium(&self) -> isize {
+        (self.left + self.right) / 2
+    }
+
+    fn lower_bound(&mut self) -> isize {
+        while self.is_searchable() {
+            let midium = self.midium();
+            match self.step_function(midium) {
+                Ordering::Less => self.left = midium + 1,
+                Ordering::Equal => {
+                    if self.strict_equal {
+                        return midium;
+                    } else {
+                        self.right = midium
+                    }
                 }
+                _ => self.right = midium,
             }
-            _ => right = midium,
+        }
+
+        if self.strict_equal {
+            -1
+        } else {
+            self.left
         }
     }
 
-    if !strict_equal {
-        left
-    } else {
-        -1
-    }
-}
-
-fn upper_bound(
-    f: fn(isize, isize, &[isize]) -> Ordering,
-    mut left: isize,
-    mut right: isize,
-    quota: isize,
-    slice: &[isize],
-    strict_equal: bool,
-) -> isize {
-    while left < right {
-        let midium = (left + right) / 2;
-        match f(midium, quota, slice) {
-            Ordering::Less => left = midium + 1,
-            Ordering::Equal => {
-                if strict_equal {
-                    return midium;
-                } else {
-                    left = midium + 1
+    fn upper_bound(&mut self) -> isize {
+        while self.is_searchable() {
+            let midium = self.midium();
+            match self.step_function(midium) {
+                Ordering::Less => self.left = midium + 1,
+                Ordering::Equal => {
+                    if self.strict_equal {
+                        return midium;
+                    } else {
+                        self.left = midium + 1
+                    }
                 }
+                _ => self.right = midium,
             }
-            _ => right = midium,
+        }
+
+        if self.strict_equal {
+            -1
+        } else {
+            self.left
         }
     }
+}
 
-    if !strict_equal {
-        left
-    } else {
-        -1
+impl<'a, T> Default for BinarySearch<'a, T>
+where
+    T: Default,
+{
+    fn default() -> Self {
+        Self {
+            data: &[],
+            left: 0,
+            right: 10_isize.pow(9),
+            target: 0,
+            strict_equal: false,
+            args: T::default(),
+        }
     }
 }
 
-fn check(query: isize, quota: isize, slice: &[isize]) -> Ordering {
-    slice[query as usize].cmp(&quota)
+impl<'a, T> BinarySearch<'a, T> {
+    fn step_function(&self, query: isize) -> Ordering {
+        self.data[query as usize].cmp(&self.target)
+    }
 }
 
 #[fastout]
@@ -104,17 +129,23 @@ fn main() {
             Q.insert(C[i] + D[j]);
         }
     }
-    let q_length = Q.len();
+    let Q_length = Q.len();
     let mut Qv: Vec<_> = Q.into_iter().collect();
     Qv.sort();
 
     for p in Pv.iter() {
-        if *p < K - Qv[q_length - 1] || *p > K - Qv[0] {
+        if *p < K - Qv[Q_length - 1] || *p > K - Qv[0] {
             continue;
         }
 
-        let index = lower_bound(check, 0, Qv.len() as isize - 1, K - p, &Qv, true);
-        if index >= 0 {
+        let mut binary_search: BinarySearch<isize> = BinarySearch {
+            data: &Qv,
+            right: Q_length as isize,
+            target: K - p,
+            strict_equal: true,
+            ..Default::default()
+        };
+        if binary_search.lower_bound() >= 0 {
             println!("Yes");
             return;
         }
