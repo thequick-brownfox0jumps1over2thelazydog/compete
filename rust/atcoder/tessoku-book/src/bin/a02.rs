@@ -13,8 +13,8 @@ fn main() {
         A: [isize; N],
     }
 
-    for &a in A.iter() {
-        if a == X {
+    for a in A.iter() {
+        if *a == X {
             println!("Yes");
             return;
         }

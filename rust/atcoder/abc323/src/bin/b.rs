@@ -3,14 +3,14 @@
 #![allow(unused_attributes)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
-#![allow(unused_doc_comments)]
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
-use std::{cmp::Ordering, collections::HashSet, fmt::Binary, str::MatchIndices};
+use std::{
+    cmp::Ordering,
+    collections::{HashMap, HashSet},
+};
 
-use ndarray::Order;
-use num_traits::real;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
@@ -52,46 +52,26 @@ fn upper_bound(
     left
 }
 
-/**
-fn check(query: isize, quota: isize, slice: &[isize]) -> Ordering {
-    slice[query as usize].cmp(&quota)
-}
-*/
-
 #[fastout]
 fn main() {
     input! {
         N: usize,
-        K: isize,
-        A: [isize; N],
+        S: [Chars; N],
     }
 
-    // 二分探索
-    /**
-    let mut result = 0;
-    for i in 0..N - 1 {
-        let les = upper_bound(check, i as isize + 1, N as isize, A[i] + K, &A);
-        result += les - (i + 1) as isize;
-    }
-    */
-    // 尺取法
-    let mut result = 0;
-    let mut index = 0;
-    for i in 0..N - 1 {
-        for j in index.max(i + 1)..N {
-            if A[j] - A[i] > K {
-                result += j - i - 1;
-                index = j;
-                break;
-            }
+    let mut player_and_wins: Vec<(isize, isize)> = vec![(0, 0); N];
 
-            if j == N - 1 {
-                result += j - i;
-                index = j;
-                break;
-            }
-        }
+    for i in 0..N {
+        let n_wins = S[i].iter().filter(|c| **c == 'o').count();
+        player_and_wins[i] = (i as isize + 1, n_wins as isize);
     }
 
-    println!("{result}");
+    player_and_wins.sort_by(|a, b| (-a.1).cmp(&(-b.1)));
+
+    let mut result = vec![String::from(""); N];
+    for (i, pw) in player_and_wins.iter().enumerate() {
+        result[i] = pw.0.to_string();
+    }
+
+    println!("{}", result.join(" "));
 }

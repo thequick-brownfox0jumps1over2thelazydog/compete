@@ -7,5 +7,5 @@ fn main() {
         S: Chars,
     }
 
-    println!("{}", S.iter().filter(|&&s| s == '1').count());
+    println!("{}", S.iter().filter(|s| **s == '1').count());
 }
