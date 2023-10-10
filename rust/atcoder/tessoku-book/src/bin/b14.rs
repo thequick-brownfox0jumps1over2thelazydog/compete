@@ -13,7 +13,6 @@ use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
 };
-use rand_core::le;
 
 fn lower_bound(
     f: fn(isize, isize, &[isize]) -> Ordering,
