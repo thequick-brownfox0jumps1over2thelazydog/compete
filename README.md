@@ -43,3 +43,15 @@ cargo compete submit <PROBLEM_NAME> [--no-test]
 - `compete.toml`
     - `test > toolchain` を現時点でAtCoderでサポートされている `"1.70.0"` に変更
     - `submit > language_id` を現時点でAtCoderにおけるRustの `"5054"` に変更
+
+
+### cargo-snippet
+
+#### Get started
+```
+cargo install cargo-snippet --features="binaries"
+
+cd ${cmp}/rust/snippets
+rm $snippet/rust.code-snippets \
+  && cargo snippet -t vscode | sed -r 's/"prefix"/"scope": "rust",\n    "prefix"/' > $snippet/rust.code-snippets
+```
