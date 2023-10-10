@@ -6,10 +6,8 @@
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
-use std::{cmp::Ordering, collections::HashSet, fmt::Binary, str::MatchIndices};
+use std::{cmp::Ordering, collections::HashSet};
 
-use ndarray::Order;
-use num_traits::real;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
@@ -64,12 +62,7 @@ fn main() {
         N: isize,
     }
 
-    const TEN: isize = 10;
-    const L: isize = TEN.pow(5);
-    const FACTOR: isize = TEN.pow(3);
+    let powered_result = lower_bound(check, 0, 10_isize.pow(5), N, &[]);
 
-    println!(
-        "{:.6}",
-        lower_bound(check, 0, L, N, &[]) as f64 / FACTOR as f64
-    );
+    println!("{:.6}", powered_result as f64 / 10_isize.pow(3) as f64);
 }

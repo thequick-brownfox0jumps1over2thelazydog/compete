@@ -7,10 +7,8 @@
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
-use std::{cmp::Ordering, collections::HashSet, fmt::Binary, str::MatchIndices};
+use std::{cmp::Ordering, collections::HashSet};
 
-use ndarray::Order;
-use num_traits::real;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
@@ -91,7 +89,7 @@ fn main() {
         D: [isize; N],
     }
 
-    let mut P: HashSet<isize> = HashSet::new();
+    let mut P = HashSet::new();
     for i in 0..N {
         for j in 0..N {
             P.insert(A[i] + B[j]);
@@ -100,7 +98,7 @@ fn main() {
     let mut Pv: Vec<_> = P.into_iter().collect();
     Pv.sort();
 
-    let mut Q: HashSet<isize> = HashSet::new();
+    let mut Q = HashSet::new();
     for i in 0..N {
         for j in 0..N {
             Q.insert(C[i] + D[j]);

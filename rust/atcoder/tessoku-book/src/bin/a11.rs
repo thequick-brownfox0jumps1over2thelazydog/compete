@@ -5,9 +5,8 @@
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
 
-use std::{cmp::Ordering, collections::HashSet, str::MatchIndices};
+use std::{cmp::Ordering, collections::HashSet};
 
-use ndarray::Order;
 use proconio::{
     fastout, input,
     marker::{Chars, Usize1},
