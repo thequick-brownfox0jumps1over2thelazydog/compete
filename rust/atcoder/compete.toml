@@ -40,6 +40,13 @@ use proconio::{
     marker::{Chars, Usize1},
 };
 
+macro_rules! debug {
+    ($($var:expr),+) => {
+        #[cfg(debug_assertions)]
+        eprintln!(concat!($(stringify!($var), "={:?}  "),+), $(&$var),+);
+    };
+}
+
 #[derive(Default)]
 struct Solver {}
 
@@ -71,10 +78,13 @@ edition = "2018"
 # `profile` for `Cargo.toml`.
 #
 # By setting this, you can run tests with `opt-level=3` while enabling `debug-assertions` and `overflow-checks`.
-#profile = '''
-#[dev]
-#opt-level = 3
-#'''
+profile = '''
+[dev]
+opt-level = 3
+
+[release]
+overflow-checks = true
+'''
 dependencies = '''
 num = "0.4.1"
 num-bigint = "0.4.4"
@@ -168,7 +178,7 @@ toolchain = "1.70.0"
 # Profile for `cargo build`. ("dev" | "release")
 #
 # Defaults to `"dev"`.
-profile = "release"
+#profile = "release"
 
 [submit]
 kind = "file"

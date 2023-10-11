@@ -36,7 +36,7 @@ cd ${cmp}/rust/atcoder
 
 # PROBLEM_NAME: a, b, c, ...
 cargo compete test <PROBLEM_NAME>
-cargo compete submit <PROBLEM_NAME> [--no-test]
+cargo compete submit --release <PROBLEM_NAME> [--no-test]
 ```
 
 #### 注意

@@ -1,6 +1,9 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
 use std::cmp::Ordering;
 
-use cargo_snippets::snippet;
+use cargo_snippet::snippet;
 
 #[snippet("binary_search", prefix = "use std::cmp::Ordering;")]
 /**

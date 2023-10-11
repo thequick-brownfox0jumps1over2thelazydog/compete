@@ -1,9 +1,19 @@
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+overflow-checks = true
+
 [package]
 name = "snippets"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
 
 [dependencies]
 cargo-snippet = "0.6.5"

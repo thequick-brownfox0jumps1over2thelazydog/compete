@@ -1,4 +1,0 @@
-{
-  "rust-analyzer.check.extraArgs": ["--target-dir=target"],
-  "rust-analyzer.linkedProjects": ["Cargo.toml"],
-}
