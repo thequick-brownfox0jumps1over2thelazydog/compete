@@ -2,20 +2,14 @@
 
 set -eu
 
-# move working path
-cd ${cmp}/rust/atcoder
-
 # create new contest workspace
+cd ${cmp}/rust/atcoder
 cargo compete new ${1}
-cd ${1}
 
-# create Visual Studio Code settings file
-mkdir .vscode
-echo '{
-  "rust-analyzer.check.extraArgs": ["--target-dir=target"],
-  "rust-analyzer.linkedProjects": ["Cargo.toml"],
-}
-' >> .vscode/settings.json
-
-# open Visual Studio Code
-code .
+# update Visual Studio Code settings file
+cd ${cmp}/.vscode
+jq \
+  --arg CONTEST ${1} \
+  '."rust-analyzer.linkedProjects" |= (.+["rust/atcoder/" + $CONTEST + "/Cargo.toml"] | unique)' \
+  settings.json \
+  1<> settings.json

@@ -1,3 +1,9 @@
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+overflow-checks = true
+
 [package]
 name = "practice"
 version = "0.1.0"

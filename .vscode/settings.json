@@ -1,0 +1,12 @@
+{
+  "rust-analyzer.check.extraArgs": [
+    "--target-dir=rust/atcoder/target"
+  ],
+  "rust-analyzer.linkedProjects": [
+    "rust/atcoder/abc323/Cargo.toml",
+    "rust/atcoder/abs/Cargo.toml",
+    "rust/atcoder/practice/Cargo.toml",
+    "rust/atcoder/tessoku-book/Cargo.toml",
+    "rust/snippets/Cargo.toml"
+  ]
+}
