@@ -18,6 +18,13 @@ cases:
       2
     out: |
       150
+  - name: unreached_node
+    in: |
+      4
+      4 3 4
+      4 3 4
+    out: |
+      150
 
 extend:
   - type: Text
