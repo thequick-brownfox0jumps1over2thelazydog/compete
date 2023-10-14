@@ -28,6 +28,15 @@ cases:
       90 10
     out: |
       1
+  - name: after_obstacle
+    in: |
+      4
+      1 1
+      2 3
+      2 2
+      3 3
+    out: |
+      3
 
 extend:
   - type: Text

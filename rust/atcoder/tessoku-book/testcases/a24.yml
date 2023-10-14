@@ -16,6 +16,12 @@ cases:
       1 1 1 1 1 1 1 1 1 1
     out: |
       1
+  - name: down_finish
+    in: |
+      3
+      2 3 1
+    out: |
+      2
 
 extend:
   - type: Text
