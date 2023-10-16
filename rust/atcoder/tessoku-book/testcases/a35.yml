@@ -10,6 +10,12 @@ cases:
       20 10 30 40
     out: |
       30
+  - name: test_04.txt
+    in: |
+      6
+      1 7297 24414 87125 56880 22560
+    out: |
+      87125
 
 extend:
   - type: Text
