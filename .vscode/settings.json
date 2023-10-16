@@ -3,6 +3,7 @@
     "--target-dir=rust/atcoder/target"
   ],
   "rust-analyzer.linkedProjects": [
+    "rust/atcoder/abc169/Cargo.toml",
     "rust/atcoder/abc323/Cargo.toml",
     "rust/atcoder/abs/Cargo.toml",
     "rust/atcoder/arc167/Cargo.toml",
