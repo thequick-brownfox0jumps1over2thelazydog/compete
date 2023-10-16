@@ -2,14 +2,11 @@
 #![allow(non_snake_case)]
 #![allow(unused_doc_comments)]
 #![allow(unused_imports)]
-#![allow(unused_macros)]
 #![allow(unused_variables)]
 #![allow(while_true)]
 #![allow(clippy::needless_range_loop)]
-#![allow(clippy::precedence)]
 
 use std::{
-    cmp::{max, min},
     collections::{HashMap, HashSet},
     thread::Builder,
 };
@@ -34,25 +31,30 @@ impl Solver {
     fn solve(&mut self) {
         input! {
             N: usize,
+            M: usize,
+            mut A: [usize; N],
         }
-        debug!(N);
 
-        let mut numbers = (2..=N).map(|n| (n, true)).collect::<HashMap<_, _>>();
-        for i in 2..=N {
-            if !numbers[&i] {
-                continue;
-            }
+        A.sort();
+        let double = N - M;
 
-            println!("{i}");
-            for j in 2..=N / i {
-                numbers.entry(i * j).and_modify(|b| *b = false);
-            }
+        let mut result = 0;
+        for i in 0..N - M {
+            result += (A[i] + A[(N - M) * 2 - i - 1]).pow(2);
+            debug!(A[i], A[(N - M) * 2 - i - 1], result);
         }
+        for j in (N - M) * 2..N {
+            result += A[j].pow(2);
+            debug!(A[j], result);
+        }
+
+        println!("{result}");
     }
 }
 
 fn main() {
     Builder::new()
+        .name("big stack size".into())
         .stack_size(32 * 1024 * 1024) // default: 2MiB -> 32MiB
         .spawn(|| Solver::default().solve())
         .unwrap()

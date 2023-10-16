@@ -63,6 +63,29 @@ fn modulo_divide(numerator: usize, denominator: usize, modulo: usize) -> usize {
     modulo_product(numerator, inverse, modulo)
 }
 
+fn prime_factorize(number: usize) -> Vec<(usize, usize)> {
+    let mut result = vec![];
+    if number <= 1 {
+        return result;
+    }
+    let square_root = (number as f64).sqrt() as usize;
+    let mut n = number;
+    for i in 2..=square_root {
+        if n % i == 0 {
+            let mut count = 0;
+            while n % i == 0 {
+                n /= i;
+                count += 1;
+            }
+            result.push((i, count));
+        }
+    }
+    if n != 1 {
+        result.push((number, 1));
+    }
+    result
+}
+
 #[derive(Default)]
 struct Solver {}
 
@@ -71,16 +94,68 @@ impl Solver {
     fn solve(&mut self) {
         input! {
             A: usize,
-            B: usize,
+            mut B: usize,
         }
-        debug!(A, B);
 
-        println!("{}", modulo_power(A, B, UPPER_LARGE_PRIME));
+        if B == 0 {
+            println!("0");
+            return;
+        }
+
+        let B_is_odd = B % 2 == 1;
+        let B_half = B / 2;
+
+        let prime_factors = prime_factorize(A);
+        debug!(prime_factors);
+        let exponent_options = prime_factors
+            .iter()
+            .map(|(_, c)| {
+                modulo_sum(
+                    modulo_product(*c, B, LOWER_LARGE_PRIME),
+                    1,
+                    LOWER_LARGE_PRIME,
+                )
+            })
+            .collect::<Vec<usize>>();
+        debug!(exponent_options);
+
+        let mut is_squared = true;
+        for i in 0..exponent_options.len() {
+            if prime_factors[i].1 % 2 == 1 && B_is_odd {
+                is_squared = false;
+                break;
+            }
+        }
+        is_squared = is_squared && B_is_odd;
+
+        let n_divisors = exponent_options.iter().fold(1, |cumulative_product, &e| {
+            modulo_product(cumulative_product, e, LOWER_LARGE_PRIME)
+        });
+        debug!(n_divisors);
+        debug!(A, B, is_squared);
+
+        let mut result = modulo_product(
+            if is_squared {
+                n_divisors + LOWER_LARGE_PRIME - 1
+            } else {
+                n_divisors
+            },
+            B,
+            LOWER_LARGE_PRIME,
+        );
+        result = modulo_divide(result, 2, LOWER_LARGE_PRIME);
+
+        if is_squared {
+            result = modulo_sum(result, B_half, LOWER_LARGE_PRIME);
+        }
+
+        println!("{result}");
     }
 }
 
 fn main() {
     Builder::new()
+        .name("big stack size".into())
         .stack_size(32 * 1024 * 1024) // default: 2MiB -> 32MiB
         .spawn(|| Solver::default().solve())
         .unwrap()

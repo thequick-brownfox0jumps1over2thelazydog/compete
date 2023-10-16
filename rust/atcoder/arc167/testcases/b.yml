@@ -1,0 +1,62 @@
+---
+type: Batch
+timelimit: 2s
+match: Lines
+
+cases:
+  - name: sample1
+    in: |
+      2 3
+    out: |
+      6
+  - name: sample2
+    in: |
+      924 167
+    out: |
+      867046524
+  - name: sample3
+    in: |
+      167167167167 0
+    out: |
+      0
+  - name: even_square_A_with_even_B
+    in: |
+      16 16
+    out: |
+      520
+  - name: even_square_A_with_odd_B
+    in: |
+      4 3
+    out: |
+      10
+  - name: odd_square_A_with_even_B
+    in: |
+      9 2
+    out: |
+      5
+  - name: odd_square_A_with_odd_B
+    in: |
+      25 5
+    out: |
+      27
+  - name: 04-mult-mod-sqrt-03.txt
+    in: |
+      813690594304 370447161715754040
+    out: |
+      0
+  - name: 06-square-even-odd-02.txt
+    in: |
+      43295205625 847171692248789991
+    out: |
+      101206077
+  - name: 13-2pow-01.txt
+    in: |
+      274877906944 998626745116565520
+    out: |
+      760270394
+
+extend:
+  - type: Text
+    path: "./b"
+    in: /in/*.txt
+    out: /out/*.txt
