@@ -1,15 +1,132 @@
+#![allow(dead_code)]
 #![allow(non_snake_case)]
+#![allow(non_upper_case_globals)]
+#![allow(unused_attributes)]
+#![allow(unused_doc_comments)]
 #![allow(unused_imports)]
+#![allow(unused_macros)]
+#![allow(unused_variables)]
 #![allow(while_true)]
+#![allow(clippy::needless_range_loop)]
+#![allow(clippy::precedence)]
 
-use std::collections::HashSet;
+use std::{
+    cmp::{max, min},
+    collections::{HashMap, HashSet},
+    thread::Builder,
+};
 
-use proconio::{input, marker::Chars};
+use num::integer::{gcd, lcm};
+use proconio::{
+    fastout, input,
+    marker::{Chars, Usize1},
+};
+
+macro_rules! debug {
+    ($($var:expr),+) => {
+        #[cfg(debug_assertions)]
+        eprintln!(concat!($(stringify!($var), "={:?}  "),+), $(&$var),+);
+    };
+}
+
+const UPPER_LARGE_PRIME: usize = 1e9 as usize + 7;
+const LOWER_LARGE_PRIME: usize = 998_244_353;
+
+fn modulo_sum(a: usize, b: usize, modulo: usize) -> usize {
+    (a % modulo + b % modulo) % modulo
+}
+fn modulo_product(a: usize, b: usize, modulo: usize) -> usize {
+    (a % modulo) * (b % modulo) % modulo
+}
+fn modulo_factorial(left: usize, right: usize, modulo: usize) -> usize {
+    let mut result = 1;
+    for i in left..=right {
+        result = modulo_product(result, i, modulo);
+    }
+    result
+}
+fn modulo_power(number: usize, exponent: usize, modulo: usize) -> usize {
+    let n = number % modulo;
+    let digits = format!("{:b}", exponent).len();
+    let mut factor = 1;
+    let mut result = 1;
+    for i in 0..digits {
+        factor = factor * if factor == 1 { n } else { factor } % modulo;
+        if exponent & 1 << i > 0 {
+            result = result * factor % modulo;
+        }
+    }
+    result
+}
+fn modulo_divide(numerator: usize, denominator: usize, modulo: usize) -> usize {
+    let inverse = modulo_power(denominator, modulo - 2, modulo);
+    modulo_product(numerator, inverse, modulo)
+}
+
+#[derive(Default)]
+struct Solver {}
+
+impl Solver {
+    #[fastout]
+    fn solve(&mut self) {
+        input! {
+            H: usize,
+            W: usize,
+        }
+        debug!(H, W);
+
+        /** TLE
+        let mut dp = vec![vec![1; W]; H];
+        let square_index = min(H, W);
+        for i in 1..square_index {
+            for j in i..square_index {
+                if i == j {
+                    dp[i][j] = modulo_product(dp[i - 1][j], 2, UPPER_LARGE_PRIME);
+                } else {
+                    dp[i][j] = modulo_sum(dp[i - 1][j], dp[i][j - 1], UPPER_LARGE_PRIME);
+                }
+            }
+        }
+        if H == W {
+            println!("{}", dp[H - 1][W - 1]);
+            return;
+        }
+        debug!(dp);
+
+        if H > W {
+            for j in 1..W {
+                dp[W - 1][j] = dp[j][W - 1];
+            }
+            for i in W..H {
+                for j in 1..W {
+                    dp[i][j] = modulo_sum(dp[i - 1][j], dp[i][j - 1], UPPER_LARGE_PRIME);
+                }
+            }
+        } else {
+            for i in 1..H {
+                for j in H..W {
+                    dp[i][j] = modulo_sum(dp[i - 1][j], dp[i][j - 1], UPPER_LARGE_PRIME);
+                }
+            }
+        }
+        debug!(dp);
+
+        println!("{}", dp[H - 1][W - 1]);
+        */
+        let result = modulo_divide(
+            modulo_factorial(H, H + W - 2, UPPER_LARGE_PRIME),
+            modulo_factorial(1, W - 1, UPPER_LARGE_PRIME),
+            UPPER_LARGE_PRIME,
+        );
+        println!("{result}");
+    }
+}
 
 fn main() {
-    input! {
-
-    }
-
-
+    Builder::new()
+        .stack_size(32 * 1024 * 1024) // default: 2MiB -> 32MiB
+        .spawn(|| Solver::default().solve())
+        .unwrap()
+        .join()
+        .unwrap();
 }
