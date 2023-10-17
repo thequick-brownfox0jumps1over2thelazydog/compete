@@ -9,6 +9,7 @@
     "rust/atcoder/arc167/Cargo.toml",
     "rust/atcoder/practice/Cargo.toml",
     "rust/atcoder/tessoku-book/Cargo.toml",
-    "rust/snippets/Cargo.toml"
+    "rust/snippets/Cargo.toml",
+    "./rust/snippets/Cargo.toml"
   ]
 }
