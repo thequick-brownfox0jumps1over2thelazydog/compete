@@ -10,10 +10,11 @@
 #![allow(clippy::needless_range_loop)]
 #![allow(clippy::precedence)]
 
+use core::panic;
 use std::{
     cmp::{max, min, Ordering},
-    collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet},
-    fmt::{Debug, Formatter, Result},
+    collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque},
+    fmt::Debug,
     iter::FromIterator,
     thread::Builder,
 };
@@ -31,62 +32,11 @@ macro_rules! debug {
     };
 }
 
-fn adjacency_maps(
-    n_nodes: usize,
-    edges: Vec<(usize, usize, usize)>,
-    is_symmetric: bool,
-) -> Vec<BTreeMap<usize, usize>> {
-    let mut result = vec![BTreeMap::new(); n_nodes];
-    for (a, b, v) in edges.into_iter() {
-        result[a].insert(b, v);
-        if is_symmetric {
-            result[b].insert(a, v);
-        }
-    }
-    result
-}
-fn dfs(
-    node: usize,
-    goal: usize,
-    adjacency_maps: &Vec<BTreeMap<usize, usize>>,
-    histories: &mut Vec<bool>,
-    route: &mut Vec<usize>,
-) -> bool {
-    histories[node] = true;
-    if node == goal {
-        route.push(node);
-        return true;
-    }
-
-    let mut is_reached = false;
-    for &nn in adjacency_maps[node].keys().rev() {
-        if histories[nn] {
-            continue;
-        }
-
-        is_reached = dfs(nn, goal, adjacency_maps, histories, route);
-        if is_reached {
-            route.push(node);
-            break;
-        }
-    }
-
-    is_reached
-}
-
+#[derive(Debug)]
 struct Node {
     id: usize,
     previous_node_id: usize,
     distance: isize,
-}
-impl Debug for Node {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(
-            f,
-            "Node(id: {}, previous_node_id: {}, distance: {})",
-            self.id, self.previous_node_id, self.distance
-        )
-    }
 }
 impl Ord for Node {
     fn cmp(&self, other: &Self) -> Ordering {
@@ -105,6 +55,224 @@ impl PartialEq for Node {
 }
 impl Eq for Node {}
 
+#[derive(Clone, Debug)]
+struct Edge {
+    capacity: usize,
+    flow: usize,
+}
+impl Edge {
+    fn increasable(&self) -> bool {
+        self.surplus() > 0
+    }
+    fn decreasable(&self) -> bool {
+        self.flow > 0
+    }
+    fn surplus(&self) -> usize {
+        self.capacity - self.flow
+    }
+    fn increase_flow(&mut self, diff: usize) {
+        if !self.increasable() {
+            panic!("Cannot increase flow.");
+        }
+        self.flow += diff;
+    }
+    fn decrease_flow(&mut self, diff: usize) {
+        if !self.decreasable() {
+            panic!("Cannot decrease flow.");
+        }
+        self.flow -= diff;
+    }
+}
+#[derive(Debug, PartialEq)]
+enum NetworkType {
+    Undirected,
+    Directed,
+    Residual,
+}
+#[derive(Debug)]
+struct Network {
+    network_type: NetworkType,
+    n_nodes: usize,
+    edge_maps: Vec<BTreeMap<usize, Edge>>,
+}
+impl Network {
+    fn new(
+        network_type: NetworkType,
+        n_nodes: usize,
+        edges: Vec<(usize, usize, usize)>,
+    ) -> Network {
+        let mut network = Network {
+            network_type,
+            n_nodes,
+            edge_maps: vec![BTreeMap::new(); n_nodes],
+        };
+        for (a, b, c) in edges.into_iter() {
+            network.add_edge(a, b, c);
+        }
+        network
+    }
+    fn add_edge(&mut self, from: usize, to: usize, capacity: usize) {
+        self.edge_maps[from]
+            .entry(to)
+            .and_modify(|e| {
+                e.capacity += capacity;
+            })
+            .or_insert(Edge { capacity, flow: 0 });
+        if self.network_type == NetworkType::Undirected {
+            self.edge_maps[to].insert(from, Edge { capacity, flow: 0 });
+        }
+        if self.network_type == NetworkType::Residual {
+            self.edge_maps[to]
+                .entry(from)
+                .and_modify(|e| {
+                    e.capacity += capacity;
+                    e.flow += capacity;
+                })
+                .or_insert(Edge {
+                    capacity,
+                    flow: capacity,
+                });
+        }
+    }
+    fn depth_first_search(
+        &self,
+        node_id: usize,
+        goal_id: usize,
+        histories: &mut Vec<bool>,
+        route: &mut Vec<usize>,
+    ) -> bool {
+        histories[node_id] = true;
+        if node_id == goal_id {
+            route.push(node_id);
+            return true;
+        }
+        let mut is_reached = false;
+        for &next_node_id in self.edge_maps[node_id].keys().rev() {
+            if histories[next_node_id] {
+                continue;
+            }
+            if !self.edge_maps[node_id][&next_node_id].increasable() {
+                continue;
+            }
+            is_reached = self.depth_first_search(next_node_id, goal_id, histories, route);
+            if is_reached {
+                route.push(node_id);
+                break;
+            }
+        }
+        is_reached
+    }
+
+    fn dijkstra(&mut self, start_id: usize, goal_id: usize) -> Vec<Node> {
+        let mut nodes = (0..self.n_nodes)
+            .map(|n| Node {
+                id: n,
+                previous_node_id: n,
+                distance: -1,
+            })
+            .collect::<Vec<Node>>();
+        let mut queues = BinaryHeap::from_iter([Node {
+            id: start_id,
+            previous_node_id: start_id,
+            distance: 0,
+        }]);
+
+        while !queues.is_empty() {
+            let min_node = queues.pop().unwrap();
+            if nodes[min_node.id].distance >= 0 {
+                continue;
+            }
+
+            nodes[min_node.id].previous_node_id = min_node.previous_node_id;
+            nodes[min_node.id].distance = min_node.distance;
+            if min_node.id == goal_id {
+                break;
+            }
+
+            for (next_node, edge) in self.edge_maps[min_node.id].iter() {
+                if nodes[*next_node].distance >= 0 {
+                    continue;
+                }
+
+                queues.push(Node {
+                    id: *next_node,
+                    previous_node_id: min_node.id,
+                    distance: min_node.distance + edge.capacity as isize,
+                });
+            }
+        }
+
+        nodes
+    }
+
+    fn max_flow(&mut self, capacity_upper_bound: usize) -> usize {
+        let mut result = 0;
+        while true {
+            let mut histories = vec![false; self.n_nodes];
+            let mut route: Vec<usize> = vec![];
+            if !self.depth_first_search(0, self.n_nodes - 1, &mut histories, &mut route) {
+                break;
+            }
+            route.reverse();
+            let mut min_capacity = capacity_upper_bound;
+            for i in 0..route.len() - 1 {
+                min_capacity = min_capacity.min(self.edge_maps[route[i]][&route[i + 1]].surplus());
+            }
+            for i in 0..route.len() - 1 {
+                let from = route[i];
+                let to = route[i + 1];
+                self.edge_maps[from].entry(to).and_modify(|e| {
+                    e.increase_flow(min_capacity);
+                });
+                self.edge_maps[to].entry(from).and_modify(|e| {
+                    e.decrease_flow(min_capacity);
+                });
+            }
+            result += min_capacity;
+        }
+        result
+    }
+}
+#[derive(Debug)]
+struct UnionFind {
+    parents: Vec<isize>,
+    group_sizes: Vec<usize>,
+}
+impl UnionFind {
+    fn new(n_nodes: usize) -> Self {
+        Self {
+            parents: vec![-1; n_nodes],
+            group_sizes: vec![1; n_nodes],
+        }
+    }
+    fn root(&mut self, node: usize) -> usize {
+        let p = self.parents[node];
+        if p == -1 {
+            node
+        } else {
+            self.parents[node] = self.root(p as usize) as isize;
+            self.parents[node] as usize
+        }
+    }
+    fn same(&mut self, a: usize, b: usize) -> bool {
+        self.root(a) == self.root(b)
+    }
+    fn unite(&mut self, a: usize, b: usize) {
+        let a_root = self.root(a);
+        let b_root = self.root(b);
+        if a_root == b_root {
+            return;
+        }
+        if self.group_sizes[a_root] < self.group_sizes[b_root] {
+            self.parents[a_root] = b_root as isize;
+            self.group_sizes[b_root] += self.group_sizes[a_root];
+        } else {
+            self.parents[b_root] = a_root as isize;
+            self.group_sizes[a_root] += self.group_sizes[b_root];
+        }
+    }
+}
+
 #[fastout]
 fn solve() {
     input! {
@@ -114,66 +282,12 @@ fn solve() {
     }
     debug!(N, M, ABC);
 
-    let adjacency_maps = adjacency_maps(N, ABC, true);
-    debug!(adjacency_maps);
+    let mut network = Network::new(NetworkType::Undirected, N, ABC);
 
-    let mut queues = BinaryHeap::from_iter([Node {
-        id: 0,
-        previous_node_id: 0,
-        distance: 0,
-    }]);
-    let mut nodes = (0..N)
-        .map(|n| Node {
-            id: n,
-            previous_node_id: n,
-            distance: -1,
-        })
-        .collect::<Vec<Node>>();
-
-    while !queues.is_empty() {
-        debug!(queues);
-
-        let min_node = queues.pop().unwrap();
-        if nodes[min_node.id].distance >= 0 {
-            continue;
-        }
-
-        nodes[min_node.id] = if min_node.id == 0 {
-            Node {
-                id: min_node.id,
-                previous_node_id: min_node.id,
-                distance: 0,
-            }
-        } else {
-            Node {
-                id: min_node.id,
-                previous_node_id: min_node.previous_node_id,
-                distance: min_node.distance,
-            }
-        };
-
-        if min_node.id == N - 1 {
-            break;
-        }
-
-        for (&next_node, &edge_value) in adjacency_maps[min_node.id].iter() {
-            if nodes[next_node].distance >= 0 {
-                continue;
-            }
-
-            let new_distance = min_node.distance + edge_value as isize;
-            queues.push(Node {
-                id: next_node,
-                previous_node_id: min_node.id,
-                distance: new_distance,
-            });
-        }
-    }
-
-    debug!(nodes);
+    let mut node_id = N - 1;
+    let nodes = network.dijkstra(0, node_id);
 
     let mut result = vec![];
-    let mut node_id = N - 1;
     while node_id > 0 {
         result.push(node_id);
         node_id = nodes[node_id].previous_node_id;
