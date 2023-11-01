@@ -42,6 +42,7 @@ use std::{
     thread::Builder,
 };
 
+use itertools::Itertools;
 use num::integer::{gcd, lcm};
 use proconio::{
     fastout, input,
@@ -66,7 +67,6 @@ fn solve() {
 
 fn main() {
     Builder::new()
-        .name("big stack size".into())
         .stack_size(32 * 1024 * 1024) // default: 2MiB -> 32MiB
         .spawn(solve)
         .unwrap()

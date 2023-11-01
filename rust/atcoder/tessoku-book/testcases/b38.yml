@@ -10,6 +10,12 @@ cases:
       AABBBA
     out: |
       15
+  - name: starts_and_ends_with_b
+    in: |
+      7
+      BBAAAB
+    out: |
+      16
 
 extend:
   - type: Text
