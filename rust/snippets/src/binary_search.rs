@@ -107,6 +107,12 @@ where
 
 #[snippet("binary_search")]
 impl<'a, T> BinarySearch<'a, T> {
+    /**
+     * e.g.
+     * ```
+     * self.data[query as usize].cmp(&self.target)
+     * ```
+     */
     fn step_function(&self, query: isize) -> Ordering {
         todo!()
     }

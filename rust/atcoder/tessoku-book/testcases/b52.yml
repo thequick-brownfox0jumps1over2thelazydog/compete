@@ -10,6 +10,12 @@ cases:
       #...#
     out: |
       #@@@#
+  - name: random_01
+    in: |
+      10 5
+      .#.#.####.
+    out: |
+      .#.#@####.
 
 extend:
   - type: Text
