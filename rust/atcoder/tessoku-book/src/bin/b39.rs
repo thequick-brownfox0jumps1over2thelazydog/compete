@@ -18,6 +18,7 @@ use std::{
     thread::Builder,
 };
 
+use itertools::Itertools;
 use num::integer::{gcd, lcm};
 use proconio::{
     fastout, input,

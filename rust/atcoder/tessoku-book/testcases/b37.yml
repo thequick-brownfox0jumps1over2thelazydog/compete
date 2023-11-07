@@ -14,6 +14,11 @@ cases:
       288
     out: |
       2826
+  - name: small_03.txt
+    in: |
+      27
+    out: |
+      144
 
 extend:
   - type: Text

@@ -1,6 +1,6 @@
 {
   "rust-analyzer.check.extraArgs": [
-    "--target-dir=rust/atcoder/target"
+    "--target-dir=target"
   ],
   "rust-analyzer.linkedProjects": [
     "rust/atcoder/abc169/Cargo.toml",
