@@ -13,6 +13,15 @@ cases:
       #..######.
     out: |
       37
+  - name: 99_challenge_00
+    in: |
+      4 4 3
+      ...#
+      ..#.
+      .#..
+      .###
+    out: |
+      15
 
 extend:
   - type: Text
