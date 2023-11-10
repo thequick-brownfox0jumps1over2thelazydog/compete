@@ -59,10 +59,8 @@ macro_rules! debug {
 #[fastout]
 fn solve() {
     input! {
-        //
+        N: usize,
     }
-
-    //
 }
 
 fn main() {
