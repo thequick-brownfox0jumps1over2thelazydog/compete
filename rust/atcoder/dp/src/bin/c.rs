@@ -35,10 +35,23 @@ macro_rules! debug {
 #[fastout]
 fn solve() {
     input! {
-        //
+        N: usize,
+        ABC: [[usize; 3]; N],
     }
 
-    //
+    let mut dp = vec![vec![0; 3]; N];
+    dp[0] = ABC[0].clone();
+
+    for i in 1..N {
+        for j in 0..3 {
+            dp[i][j] = max(
+                dp[i - 1][(j + 1) % 3] + ABC[i][j],
+                dp[i - 1][(j + 2) % 3] + ABC[i][j],
+            );
+        }
+    }
+
+    println!("{}", dp[N - 1].iter().max().unwrap());
 }
 
 fn main() {

@@ -35,10 +35,41 @@ macro_rules! debug {
 #[fastout]
 fn solve() {
     input! {
-        //
+        N: usize,
+        W: usize,
+        WV: [(usize, usize); N],
     }
 
-    //
+    const UNREACHABLE_WEIGHT: usize = 100_000_000_001;
+    const VALUE_UPPER_BOUND: usize = 100_001;
+
+    let mut dp = vec![vec![UNREACHABLE_WEIGHT; VALUE_UPPER_BOUND]; N + 1];
+    dp[0][0] = 0;
+
+    let mut max_value = 0;
+    for i in 0..N {
+        let (weight, value) = WV[i];
+
+        for j in 0..100_001 {
+            if dp[i][j] == UNREACHABLE_WEIGHT {
+                continue;
+            }
+
+            dp[i + 1][j] = min(dp[i + 1][j], dp[i][j]);
+
+            let new_value = j + value;
+            let new_weight = dp[i][j] + weight;
+            if new_weight <= W {
+                dp[i + 1][new_value] = min(dp[i + 1][new_value], new_weight);
+            }
+
+            if i == N - 1 {
+                max_value = max(max_value, if new_weight <= W { new_value } else { j });
+            }
+        }
+    }
+
+    println!("{max_value}");
 }
 
 fn main() {

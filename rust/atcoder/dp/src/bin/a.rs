@@ -36,19 +36,18 @@ macro_rules! debug {
 fn solve() {
     input! {
         N: usize,
-        H: [usize; N],
+        H: [isize; N],
     }
 
     let mut dp = vec![1_000_000_000; N];
     dp[0] = 0;
 
     for i in 0..N - 1 {
-        dp[i + 1] = min(dp[i + 1], dp[i] + (H[i + 1] as isize - H[i] as isize).abs());
+        dp[i + 1] = min(dp[i + 1], dp[i] + (H[i + 1] - H[i]).abs());
         if i < N - 2 {
-            dp[i + 2] = min(dp[i + 2], dp[i] + (H[i + 2] as isize - H[i] as isize).abs());
+            dp[i + 2] = min(dp[i + 2], dp[i] + (H[i + 2] - H[i]).abs());
         }
     }
-    debug!(dp);
 
     println!("{}", dp[N - 1]);
 }

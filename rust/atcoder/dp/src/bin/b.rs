@@ -37,10 +37,22 @@ fn solve() {
     input! {
         N: usize,
         K: usize,
-        H: [usize; N],
+        H: [isize; N],
     }
 
-    //
+    let mut dp = vec![1_000_000_000; N];
+    dp[0] = 0;
+
+    for i in 0..N - 1 {
+        for k in 1..=K {
+            if i + k == N {
+                break;
+            }
+            dp[i + k] = min(dp[i + k], dp[i] + (H[i + k] - H[i]).abs());
+        }
+    }
+
+    println!("{}", dp[N - 1]);
 }
 
 fn main() {
