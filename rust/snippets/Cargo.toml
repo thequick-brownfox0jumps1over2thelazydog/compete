@@ -17,3 +17,5 @@ path = "src/main.rs"
 
 [dependencies]
 cargo-snippet = "0.6.5"
+num = "0.4.1"
+num-complex = "0.4.4"
