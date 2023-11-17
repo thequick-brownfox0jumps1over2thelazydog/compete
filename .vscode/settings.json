@@ -5,6 +5,7 @@
   "rust-analyzer.linkedProjects": [
     "rust/atcoder/abc169/Cargo.toml",
     "rust/atcoder/abc323/Cargo.toml",
+    "rust/atcoder/abc328/Cargo.toml",
     "rust/atcoder/abs/Cargo.toml",
     "rust/atcoder/arc167/Cargo.toml",
     "rust/atcoder/atc001/Cargo.toml",
