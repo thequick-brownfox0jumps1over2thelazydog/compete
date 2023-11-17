@@ -34,8 +34,33 @@ macro_rules! debug {
 
 #[fastout]
 fn solve() {
+    // 19 [min]
+    // from: 2023-11-17 12:55
+    // to: 2023-11-17 13:14
     input! {
-        N: usize,
+        S: Chars,
+    }
+
+    let mut stacks = vec![];
+    let mut stack_size = 0;
+    for i in 0..S.len() {
+        stacks.push(S[i]);
+        stack_size += 1;
+
+        if stack_size < 3 {
+            continue;
+        }
+
+        if stacks[stack_size - 3..] == ['A', 'B', 'C'] {
+            stacks.pop();
+            stacks.pop();
+            stacks.pop();
+            stack_size -= 3;
+        }
+    }
+
+    if stack_size > 0 {
+        println!("{}", stacks.iter().map(|c| c.to_string()).join(""));
     }
 }
 
