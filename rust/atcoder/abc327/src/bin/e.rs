@@ -36,7 +36,43 @@ macro_rules! debug {
 fn solve() {
     input! {
         N: usize,
+        P: [f64; N],
     }
+
+    let mut max_rate = f64::MIN;
+    let mut dp = vec![vec![0.0; N + 1]; N + 1];
+    let mut denominator = 0.0;
+    for k in 1..=N {
+        denominator = 0.9 * denominator + 1.0;
+        let last_term = 1200.0 / (k as f64).sqrt();
+
+        for j in 1..=N {
+            let composite = 0.9 * dp[k - 1][j - 1] + P[j - 1];
+
+            match k.cmp(&j) {
+                Ordering::Greater => {}
+                Ordering::Equal => {
+                    dp[k][j] = composite;
+                }
+                Ordering::Less => {
+                    dp[k][j] = if dp[k][j - 1] < composite {
+                        composite
+                    } else {
+                        dp[k][j - 1]
+                    };
+                }
+            }
+        }
+        debug!(k, dp[k][N]);
+
+        let rate = dp[k][N] / denominator - last_term;
+        if max_rate < rate {
+            max_rate = rate;
+        }
+    }
+    debug!(dp);
+
+    println!("{max_rate}");
 }
 
 fn main() {
